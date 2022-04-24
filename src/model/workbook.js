@@ -1,7 +1,9 @@
 var XlsxPopulate = require('xlsx-populate');
+const {CustomError, BAD_REQUEST} = require("../http/customError");
 
 class Workbook {
-    constructor(sheetName='Sheet1') {
+    constructor(colTitles, sheetName = 'Sheet1') {
+        this.colTitles = colTitles;
         this.sheetName = sheetName;
         this.file = null;
     }
@@ -9,25 +11,35 @@ class Workbook {
     create() {
         return XlsxPopulate.fromBlankAsync()
             .then(workbook => {
-                this.file = workbook.sheet(this.sheetName).cell("A1").style('fill', style);
+                let cell = 'A';
+                for (let colTitle of this.colTitles) {
+                    workbook.sheet(this.sheetName).cell(`${cell}1`).value(colTitle)
+                    cell = String.fromCharCode(cell.charCodeAt(0) + 1);
+                }
+
+                this.file = workbook;
                 return this;
             })
-            .catch(() => {
+            .catch((e) => {
+                console.error(e);
                 return;
             })
     }
+
+    write() {
+    }
+
+    protect(password) {
+    }
+
+    export() {
+    }
 }
 
-
-const style = {
-    type: "pattern",
-    pattern: "darkDown",
-    foreground: {
-        rgb: "ff0000"
-    },
-    background: {
-        theme: 3,
-        tint: 0.4
+const titleStyle = {
+    bold: true,
+    backgroundColor: {
+        rgb: "B8C5E6"
     }
 }
 
