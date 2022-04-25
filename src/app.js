@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const indexRouter = require('./routes/routes');
 const logger = require('./config/logger');
 const {requestHandler} = require("express-intercept");
-const {CustomError, UNAUTHORIZED} = require("./http/customError");
+const {CustomError} = require("./model/internalServerError");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -18,12 +18,12 @@ app.use(((req, res, next) => {
 }));
 
 /** 권한 체크 **/
-app.use(requestHandler().getRequest(req => {
+app.use(((req, res, next) => {
     if(!req.get("username") || !req.get('access-token')) {
-        // throw new CustomError(UNAUTHORIZED.status, UNAUTHORIZED.errorMsg)
-    };
+        // res.status(401).json({message: '비인증 사용자입니다.'})
+    }
+    next();
 }));
-
 
 app.use('/v1', indexRouter);
 module.exports = app;
