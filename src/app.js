@@ -3,8 +3,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const indexRouter = require('./routes/routes');
 const logger = require('./config/logger');
-const {requestHandler} = require("express-intercept");
-const {CustomError} = require("./model/internalServerError");
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
