@@ -36,8 +36,8 @@ router.post('/public-excel-file-sync', async function (req, res, next) {
  **/
 router.post('/protect-excel-file-sync', async function (req, res, next) {
     try {
-        if (!res.body.password) throw new BadRequestError("비밀번호는 필수값입니다.");
-        const file = await createFile(req.body.header, req.body.contents, res.body.password);
+        if (!req.body.password) throw new BadRequestError("비밀번호는 필수값입니다.");
+        const file = await createFile(req.body.header, req.body.contents, req.body.password);
         const result = createStream(file);
 
         res.set('Content-disposition', 'attachment; filename=' + 'test.xlsx');
