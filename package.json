@@ -9,6 +9,7 @@
   "dependencies": {
     "aws-sdk": "^2.1120.0",
     "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-intercept": "^0.8.10",

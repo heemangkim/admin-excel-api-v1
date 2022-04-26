@@ -6,7 +6,7 @@ class Workbook {
         this.file = null;
     }
 
-    create() {
+    create(contents) {
         return XlsxPopulate.fromBlankAsync()
             .then(workbook => {
                 let cell = 'A';
@@ -15,12 +15,7 @@ class Workbook {
                     cell = String.fromCharCode(cell.charCodeAt(0) + 1);
                 }
 
-                let testList = [];
-                for(let i=0; i<100; i++) {
-                    testList.push({test1: '123', test2: '123', test3: '123'});
-                }
-
-                for (let [index, row] of testList.entries()) {
+                for (let [index, row] of contents.entries()) {
                     let cell = 'A';
                     for (let item in row) {
                         workbook.sheet(this.sheetName).cell(`${cell}${index + 2}`).value(row[item])
