@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 const {createFile, createStream} = require("../service/excelService");
-const stream = require("stream");
 const {BadRequestError} = require("../model/badRequestError");
 
 /**
