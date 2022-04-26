@@ -1,6 +1,7 @@
 const {Workbook} = require("../model/workbook");
 const {BadRequestError, InternalServerError} = require("../model/internalServerError");
 const stream = require("stream");
+const {decryptPassword} = require("../lib/crypto");
 
 const createFile = async function (header, contents, password = null) {
     if(!header.length || !contents.length) throw new BadRequestError("잘못된 요청");
@@ -11,7 +12,7 @@ const createFile = async function (header, contents, password = null) {
     if (!newWorkbook.file) throw new InternalServerError("파일 생성중 에러 발생");
 
     if (password) {
-        return await newWorkbook.file.outputAsync({password: password.toString()})
+        return await newWorkbook.file.outputAsync({password: decryptPassword(password)})
     } else return await newWorkbook.file.outputAsync()
 
 }
