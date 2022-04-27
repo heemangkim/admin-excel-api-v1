@@ -24,13 +24,6 @@ app.use(cors({
     credentials: true
 }))
 
-/** 권한 체크 **/
-app.use(((req, res, next) => {
-    if (!req.get("username") || !req.get('access-token')) {
-        res.status(401).json({message: '비인증 사용자입니다.'})
-    }
-    next();
-}));
 
 /** swagger UI **/
 app.use(bodyParser.json());
@@ -43,6 +36,14 @@ app.use('/api-docs-v1', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(((req, res, next) => {
     const format = `${req.ip} ${req.hostname} [${new Date()}] "${req.method} ${req.url} ${req.protocol} ${req.header("Content-Length")}"`;
     logger.info(format);
+    next();
+}));
+
+/** 권한 체크 **/
+app.use(((req, res, next) => {
+    if (!req.get("username") || !req.get('access-token')) {
+        res.status(401).json({message: '비인증 사용자입니다.'})
+    }
     next();
 }));
 

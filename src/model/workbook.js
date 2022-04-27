@@ -9,17 +9,17 @@ class Workbook {
     create(contents) {
         return XlsxPopulate.fromBlankAsync()
             .then(workbook => {
-                let cell = 'A';
+                let count = 1;
                 for (let header of this.headers) {
-                    workbook.sheet(0).cell(`${cell}1`).value(header).style("fill", "FFFFCC")
-                    cell = String.fromCharCode(cell.charCodeAt(0) + 1);
+                    workbook.sheet(0).row(1).cell(count).value(header).style("fill", "FFFFCC")
+                    ++count;
                 }
 
                 for (let [index, row] of contents.entries()) {
-                    let cell = 'A';
+                    let count = 1;
                     for (let item in row) {
-                        workbook.sheet(0).cell(`${cell}${index + 2}`).value(row[item])
-                        cell = String.fromCharCode(cell.charCodeAt(0) + 1);
+                        workbook.sheet(0).row(index+2).cell(count).value(row[item])
+                        ++count;
                     }
                 }
 
