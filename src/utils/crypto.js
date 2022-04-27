@@ -1,6 +1,6 @@
 'use strict'
 var CryptoJS = require("crypto-js");
-var secretKey = 'brandi2015';
+const property = require("../utils/properties")
 var CryptoJSAesJson = {
     stringify: function (cipherParams) {
         var j = {ct: cipherParams.ciphertext.toString(CryptoJS.enc.Base64)};
@@ -17,6 +17,8 @@ var CryptoJSAesJson = {
     }
 }
 const decryptPassword = function (encrypted) {
+    const secretKey = property.getEncryptKey();
+    if(!secretKey) return;
     return JSON.parse(CryptoJS.AES.decrypt(encrypted, secretKey, {format: CryptoJSAesJson}).toString(CryptoJS.enc.Utf8));
 }
 module.exports={decryptPassword}

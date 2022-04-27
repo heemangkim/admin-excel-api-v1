@@ -1,8 +1,8 @@
 var XlsxPopulate = require('xlsx-populate');
+
 class Workbook {
-    constructor(colTitles, sheetName = 'Sheet1') {
-        this.colTitles = colTitles;
-        this.sheetName = sheetName;
+    constructor(headers) {
+        this.headers = headers;
         this.file = null;
     }
 
@@ -10,22 +10,31 @@ class Workbook {
         return XlsxPopulate.fromBlankAsync()
             .then(workbook => {
                 let cell = 'A';
-                for (let colTitle of this.colTitles) {
-                    workbook.sheet(this.sheetName).cell(`${cell}1`).value(colTitle)
+                for (let header of this.headers) {
+                    workbook.sheet(0).cell(`${cell}1`).value(header)
                     cell = String.fromCharCode(cell.charCodeAt(0) + 1);
                 }
 
                 for (let [index, row] of contents.entries()) {
                     let cell = 'A';
                     for (let item in row) {
-                        workbook.sheet(this.sheetName).cell(`${cell}${index + 2}`).value(row[item])
+                        workbook.sheet(0).cell(`${cell}${index + 2}`).value(row[item])
                         cell = String.fromCharCode(cell.charCodeAt(0) + 1);
                     }
                 }
 
+                workbook.sheet(0).name(this.getSheetName());
                 this.file = workbook;
                 return this;
             })
+    }
+
+    getSheetName() {
+        const source = new Date();
+        const year = source.getFullYear();
+        const month = source.getMonth() + 1;
+        const day = source.getDate();
+        return [year, month, day].join('-').toString();
     }
 }
 
