@@ -11,7 +11,7 @@ class Workbook {
             .then(workbook => {
                 let cell = 'A';
                 for (let header of this.headers) {
-                    workbook.sheet(0).cell(`${cell}1`).value(header)
+                    workbook.sheet(0).cell(`${cell}1`).value(header).style("fill", "FFFFCC")
                     cell = String.fromCharCode(cell.charCodeAt(0) + 1);
                 }
 
@@ -38,9 +38,9 @@ class Workbook {
     }
 }
 
-const titleStyle = {
+const style = {
     bold: true,
-    backgroundColor: {
+    color: {
         rgb: "B8C5E6"
     }
 }
