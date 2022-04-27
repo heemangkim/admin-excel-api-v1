@@ -8,11 +8,8 @@ const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./utils/swagger')
 const property = require('./utils/properties')
-require('dotenv').config()
 
 const app = express();
-
-app.set('port', process.env.PORT || 3000);
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());

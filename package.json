@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=dev node ./bin/www env=development",
-    "prod": "NODE_ENV=prod node ./bin/www env=production"
+    "dev": "NODE_ENV=dev node ./bin/www ",
+    "prod": "NODE_ENV=prod node ./bin/www "
   },
   "dependencies": {
     "aws-sdk": "^2.1120.0",
