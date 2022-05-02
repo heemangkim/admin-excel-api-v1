@@ -4,22 +4,32 @@ const stream = require("stream");
 var iconvLite = require('iconv-lite');
 const {decryptPassword} = require("../utils/crypto");
 
-const createFile = async function (header, contents, password = null) {
-    if(!header.length || !contents.length) throw new BadRequestError("잘못된 요청");
+const createFile = async function (headers, contents, password = null) {
+    if (!headers || !contents) throw new BadRequestError("잘못된 요청");
 
-    let workbook = new Workbook(header);
+    if (!Array.isArray(headers)) {
+        let array = [];
+        if (typeof headers === "object") {
+            for (let header of headers) {
+                array.push(header);
+            }
+            headers = array;
+        } else throw new BadRequestError("잘못된 요청");
+    }
+
+    let workbook = new Workbook(headers);
 
     let newWorkbook = await workbook.create(contents);
     if (!newWorkbook.file) throw new InternalServerError("파일 생성중 에러 발생");
 
     if (password) {
         const decryptedPassword = decryptPassword(password);
-        if(!decryptedPassword) throw new InternalServerError("파일 생성중 에러 발생");
+        if (!decryptedPassword) throw new InternalServerError("파일 생성중 에러 발생");
 
         return await newWorkbook.file.outputAsync({password: decryptedPassword})
     } else return await newWorkbook.file.outputAsync()
-
 }
+
 const createStream = function (data) {
     const readStream = new stream.PassThrough();
 
