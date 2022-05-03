@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const indexRouter = require('./routes/routes');
+const indexRouter = require('./routes/excelRoutes');
 const logger = require('./config/logger');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -28,15 +28,16 @@ app.use(((req, res, next) => {
     next();
 }));
 
-
 /** 권한 체크 **/
 app.use(((req, res, next) => {
-    if (!req.get("username") || !req.get('access-token')) {
-        res.status(401).json({message: '비인증 사용자입니다.'})
+    if (!req.get("username") || !req.get("access-token")) {
+        let error = new Error("비인증 사용자");
+        error.status = 401;
+        next(error);
+    } else {
+        next();
     }
-    next();
 }));
-
 
 app.use('/v1', indexRouter);
 module.exports = app;

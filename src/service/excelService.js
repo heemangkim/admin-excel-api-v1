@@ -22,12 +22,17 @@ const createFile = async function (headers, contents, password = null) {
     let newWorkbook = await workbook.create(contents);
     if (!newWorkbook.file) throw new InternalServerError("파일 생성중 에러 발생");
 
+
+    // 암호화 파일 생성
     if (password) {
         const decryptedPassword = decryptPassword(password);
-        if (!decryptedPassword) throw new InternalServerError("파일 생성중 에러 발생");
+        if (!decryptedPassword) throw new InternalServerError("비밀번호 생성 오류");
 
         return await newWorkbook.file.outputAsync({password: decryptedPassword})
-    } else return await newWorkbook.file.outputAsync()
+    // 공개 파일 생성
+    } else {
+        return await newWorkbook.file.outputAsync()
+    }
 }
 
 const createStream = function (data) {

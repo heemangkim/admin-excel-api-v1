@@ -36,7 +36,6 @@ router.post('/protect-excel-file-sync', async function (req, res, next) {
         res.status(201).json({result: true, data: result});
 
     } catch (e) {
-        console.log(e)
         if (e instanceof BadRequestError) {
             res.status(400).json({message: e.message})
         } else {
