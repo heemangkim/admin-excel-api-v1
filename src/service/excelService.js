@@ -1,7 +1,5 @@
 const {Workbook} = require("../model/workbook");
 const {BadRequestError, InternalServerError} = require("../model/internalServerError");
-const stream = require("stream");
-var iconvLite = require('iconv-lite');
 const {decryptPassword} = require("../utils/crypto");
 
 const createFile = async function (headers, contents, password = null) {
@@ -35,28 +33,11 @@ const createFile = async function (headers, contents, password = null) {
     }
 }
 
-const createStream = function (data) {
-    const readStream = new stream.PassThrough();
-
-    var bufferedData = Buffer.from(data, 'base64')
-    readStream.end(bufferedData);
-    return bufferedData;
+const setPasswordFile = async function(file, path, password) {
+    if (!file || !password) throw new BadRequestError("잘못된 요청");
+    // return to buffer
+    return await file.outputAsync({password: password});
 }
 
-const getDownloadFilename = function (req, filename) {
-    var header = req.headers['user-agent'];
 
-    if (header.includes("MSIE") || header.includes("Trident")) {
-        return encodeURIComponent(filename).replace(/\\+/gi, "%20");
-    } else if (header.includes("Chrome")) {
-        return iconvLite.decode(iconvLite.encode(filename, "UTF-8"), 'ISO-8859-1');
-    } else if (header.includes("Opera")) {
-        return iconvLite.decode(iconvLite.encode(filename, "UTF-8"), 'ISO-8859-1');
-    } else if (header.includes("Firefox")) {
-        return iconvLite.decode(iconvLite.encode(filename, "UTF-8"), 'ISO-8859-1');
-    }
-
-    return filename;
-}
-
-module.exports = {createFile, createStream, getDownloadFilename}
+module.exports = {createFile, setPasswordFile}

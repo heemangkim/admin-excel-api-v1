@@ -1,4 +1,4 @@
-var XlsxPopulate = require('xlsx-populate');
+var {fromBlankAsync} = require('xlsx-populate');
 
 class Workbook {
     constructor(headers) {
@@ -7,7 +7,7 @@ class Workbook {
     }
 
     create(contents) {
-        return XlsxPopulate.fromBlankAsync()
+        return fromBlankAsync()
             .then(workbook => {
                 let count = 1;
                 for (let header of this.headers) {
